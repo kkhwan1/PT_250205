@@ -1,30 +1,31 @@
-import { UserDashboard } from "@/components/user-dashboard"
-import { WorkoutPlanner } from "@/components/workout-planner"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from "next/link"
 
 export default function Home() {
   return (
-    <main className="flex-1">
-      <div className="container mx-auto py-8 space-y-8">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight">안녕하세요, 홍길동님!</h1>
-            <p className="text-muted-foreground mt-2">오늘도 건강한 하루 보내세요.</p>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button size="lg" className="shadow-lg hover:shadow-xl transition-shadow">
-              운동 시작하기
-            </Button>
-          </div>
-        </div>
-
-        <div className="mt-8">
-          <UserDashboard />
-        </div>
-        
-        <div className="grid gap-6 md:grid-cols-2">
-          <WorkoutPlanner />
-        </div>
+    <main className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-16">
+        <Card className="mx-auto max-w-lg">
+          <CardHeader className="text-center">
+            <CardTitle className="text-4xl font-bold">
+              피트니스 트래커에 오신 것을 환영합니다
+            </CardTitle>
+            <CardDescription className="text-xl mt-2">
+              건강한 라이프스타일을 시작해보세요
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-4 mt-6">
+              <Button asChild size="lg" className="w-full">
+                <Link href="/login">로그인</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="w-full">
+                <Link href="/register">회원가입</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </main>
   )

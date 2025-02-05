@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={inter.className}>
@@ -24,11 +24,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen bg-background">
-            <div className="relative flex min-h-screen flex-col">
-              {children}
-            </div>
-          </div>
+          {children}
         </ThemeProvider>
       </body>
     </html>

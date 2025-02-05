@@ -1,0 +1,13 @@
+# 개발 환경 파일
+node_modules/
+.env
+.DS_Store
+
+# 빌드 결과물
+/dist
+/build
+
+# IDE 설정
+.idea/
+.vscode/
+*.swp 

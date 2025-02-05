@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 사용자 역할 정의
+enum Role {
+  USER
+  TRAINER
+  ADMIN
+}
+
+// 성별 정의
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+// 운동 계획 상태
+enum PlanStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+// 운동 카테고리
+enum ExerciseCategory {
+  STRENGTH     // 근력 운동
+  CARDIO       // 유산소 운동
+  FLEXIBILITY  // 유연성 운동
+  BALANCE      // 균형 운동
+  HIIT         // 고강도 인터벌 트레이닝
+}
+
+// 사용자 모델
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  name          String?
+  password      String
+  role          Role        @default(USER)
+  profile       Profile?
+  workoutPlans  WorkoutPlan[]
+  workoutLogs   WorkoutLog[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([email])
+}
+
+// 프로필 모델
+model Profile {
+  id          String     @id @default(cuid())
+  userId      String     @unique
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  height      Float?
+  weight      Float?
+  birthDate   DateTime?
+  gender      Gender?
+  goals       String?    @db.Text
+  avatar      String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([userId])
+}
+
+// 운동 계획 모델
+model WorkoutPlan {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  exercises   Exercise[]
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  workoutLogs WorkoutLog[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+}
+
+// 운동 모델
+model Exercise {
+  id            String      @id @default(cuid())
+  name          String
+  description   String?     @db.Text
+  category      ExerciseCategory
+  sets          Int
+  reps          Int
+  weight        Float?
+  workoutPlanId String
+  workoutPlan   WorkoutPlan @relation(fields: [workoutPlanId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([category])
+  @@index([workoutPlanId])
+}
+
+// 운동 기록 모델
+model WorkoutLog {
+  id            String      @id @default(cuid())
+  date          DateTime
+  completed     Boolean     @default(false)
+  notes         String?
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  workoutPlanId String
+  workoutPlan   WorkoutPlan @relation(fields: [workoutPlanId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([workoutPlanId])
+  @@index([date])
+} 
